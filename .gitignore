@@ -1,0 +1,10 @@
+# Ignore all CSV files
+*.csv
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.pyc
+
+# If you have other cache files, specify them here
+*.cache
