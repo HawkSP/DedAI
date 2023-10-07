@@ -146,7 +146,7 @@ We welcome contributions! Please read our [Contributing Guidelines](./CONTRIBUTI
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE.md](./LICENSE.md) for details.
+This project operates under the DedAI v2 Restricted License Agreement. See [LICENSE.md](./LICENSE.md) for details.
 
 ## Acknowledgements
 
