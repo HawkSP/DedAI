@@ -5,29 +5,32 @@ from torch.nn.utils import spectral_norm
 from transformers import GPT2Model, GPT2Config
 
 
-# Conditional Generator with emotional states
+# Conditional Generator with emotional states and Transformer
 class ConditionalGenerator(nn.Module):
     def __init__(self, z_dim, emotion_dim, music_dim, hidden_dims, transformer_config):
         super(ConditionalGenerator, self).__init__()
         self.z_dim = z_dim
         self.emotion_dim = emotion_dim
         self.music_dim = music_dim
-        input_dim = z_dim + emotion_dim
-        layers = [nn.Linear(input_dim, hidden_dims[0]), nn.BatchNorm1d(hidden_dims[0]), nn.LeakyReLU(0.2)]
-        for i in range(len(hidden_dims) - 1):
-            layers.extend(
-                [
-                    nn.Linear(hidden_dims[i], hidden_dims[i + 1]),
-                    nn.BatchNorm1d(hidden_dims[i + 1]),
-                    nn.LeakyReLU(0.2)
-                ]
-            )
-        layers.append(nn.Linear(hidden_dims[-1], music_dim))
-        self.model = nn.Sequential(*layers)
+        self.transformer = GPT2Model(transformer_config)
+
+        # Initial linear layer to match transformer input dimension
+        self.initial_layer = nn.Linear(z_dim + emotion_dim, transformer_config.n_embd)
+
+        # Final linear layer to produce music motif
+        self.final_layer = nn.Linear(transformer_config.n_embd, music_dim)
 
     def forward(self, z, emotional_state):
+        # Concatenate z and emotional_state and pass through initial linear layer
         z_emotion = torch.cat([z, emotional_state], dim=1)
-        return self.model(z_emotion)
+        transformer_input = self.initial_layer(z_emotion)
+
+        # Pass through Transformer
+        transformer_output = self.transformer(inputs_embeds=transformer_input).last_hidden_state
+
+        # Generate music motif
+        music_motif = self.final_layer(transformer_output[:, -1, :])
+        return music_motif
 
 
 # Discriminator with spectral normalization
