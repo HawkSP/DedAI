@@ -43,6 +43,8 @@ DedAI v2 is a pioneering venture that leverages computational neuroscience and m
 - **AI-Driven Music Recommendation**: Employing Reinforcement Learning and NLP algorithms to recommend music that aligns with the user's emotional state.
 - **User Clustering for Enhanced Personalization**: Utilizing unsupervised learning algorithms to cluster users based on their emotional and musical preferences.
 
+![Model Architecture](https://imgur.com/AgqkgTe.png)
+
 ---
 
 ## Scientific Justification
